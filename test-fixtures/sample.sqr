@@ -1,0 +1,46 @@
+!***********************************************************************
+! SAMPLE001: Demo report for the PeopleSoft SQR extension
+!***********************************************************************
+#include 'setenv.sqc'
+
+begin-setup
+  page-size 60 132
+end-setup
+
+begin-report
+  do Init-DateTime
+  do Process-Main
+  do Missing-Proc            ! lint: not defined (info because of #include)
+  do Format-Line ('a')       ! lint: argument count mismatch
+  do Stdapi-Term
+end-report
+
+!-----------------------------------------------------------------------
+! Reads active employees and prints them.
+! Called once from begin-report.
+!-----------------------------------------------------------------------
+begin-procedure Process-Main
+begin-select
+A.EMPLID   &A.EMPLID
+A.NAME     &A.NAME
+  let $line = &A.EMPLID || ' - ' || &A.NAME
+  do Format-Line ($line, 10)
+FROM PS_PERSONAL_DATA A
+end-select
+  if #sql-count = 0
+    show 'No rows'
+  ! TODO: missing end-if above
+end-procedure
+
+begin-procedure Format-Line ($text, #width)
+  print $text (+1,1,#width) bold
+end-procedure
+
+begin-procedure Format-Line
+end-procedure
+
+begin-procedure Never-Used
+  show 'unterminated
+end-procedure
+
+#include 'stdapi.sqc'

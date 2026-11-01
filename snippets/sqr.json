@@ -1,0 +1,386 @@
+{
+  "Procedure": {
+    "prefix": ["proc", "begin-procedure"],
+    "description": "Procedure with a documentation banner (shown on hover)",
+    "body": [
+      "!***********************************************************************",
+      "! ${1:Procedure-Name}",
+      "! ${2:Description}",
+      "!***********************************************************************",
+      "begin-procedure ${1:Procedure-Name}",
+      "  $0",
+      "end-procedure ! ${1:Procedure-Name}"
+    ]
+  },
+  "Procedure with parameters": {
+    "prefix": ["procp", "begin-procedure-params"],
+    "description": "Procedure that takes arguments",
+    "body": [
+      "begin-procedure ${1:Procedure-Name} (${2:\\$arg1}, ${3:#arg2})",
+      "  $0",
+      "end-procedure"
+    ]
+  },
+  "Do": {
+    "prefix": "do",
+    "description": "Call a procedure",
+    "body": "do ${1:Procedure-Name}"
+  },
+  "Do with arguments": {
+    "prefix": "dop",
+    "description": "Call a procedure with arguments",
+    "body": "do ${1:Procedure-Name} (${2:\\$arg1}, ${3:#arg2})"
+  },
+  "Program": {
+    "prefix": ["program", "begin-program"],
+    "description": "Main program section",
+    "body": [
+      "begin-program",
+      "  $0",
+      "end-program"
+    ]
+  },
+  "Report": {
+    "prefix": "begin-report",
+    "description": "Main report section (legacy synonym of begin-program)",
+    "body": [
+      "begin-report",
+      "  $0",
+      "end-report"
+    ]
+  },
+  "Setup": {
+    "prefix": ["setup", "begin-setup"],
+    "description": "Setup section with page size",
+    "body": [
+      "begin-setup",
+      "  page-size ${1:60} ${2:132}",
+      "  $0",
+      "end-setup"
+    ]
+  },
+  "Declare layout": {
+    "prefix": "declare-layout",
+    "description": "Page layout declaration",
+    "body": [
+      "declare-layout ${1:default}",
+      "  orientation=${2|portrait,landscape|}",
+      "  max-lines=${3:60}",
+      "  max-columns=${4:132}",
+      "end-declare"
+    ]
+  },
+  "Heading": {
+    "prefix": ["heading", "begin-heading"],
+    "description": "Page heading",
+    "body": [
+      "begin-heading ${1:3}",
+      "  print '${2:Report Title}' (1,1) center",
+      "  print 'Page' (+1,1)",
+      "  print #page-count (,+1)",
+      "  $0",
+      "end-heading"
+    ]
+  },
+  "Footing": {
+    "prefix": ["footing", "begin-footing"],
+    "description": "Page footing",
+    "body": [
+      "begin-footing ${1:1}",
+      "  $0",
+      "end-footing"
+    ]
+  },
+  "Select": {
+    "prefix": ["select", "bsel", "begin-select"],
+    "description": "begin-select loop",
+    "body": [
+      "begin-select",
+      "${1:A.COLUMN}  &${1:A.COLUMN}",
+      "  $0",
+      "FROM PS_${2:TABLE} A",
+      "WHERE ${3:A.COLUMN = 'X'}",
+      "end-select"
+    ]
+  },
+  "Select with ORDER BY": {
+    "prefix": "bselo",
+    "description": "begin-select with two columns, WHERE and ORDER BY",
+    "body": [
+      "begin-select",
+      "${1:A.EMPLID}  &${1:A.EMPLID}",
+      "${2:A.EFFDT}  &${2:A.EFFDT}",
+      "  $0",
+      "FROM PS_${3:JOB} A",
+      "WHERE ${4:A.EMPL_STATUS = 'A'}",
+      "ORDER BY ${1:A.EMPLID}",
+      "end-select"
+    ]
+  },
+  "SQL": {
+    "prefix": ["sql", "begin-sql"],
+    "description": "begin-sql block for INSERT / UPDATE / DELETE",
+    "body": [
+      "begin-sql",
+      "  ${1:UPDATE PS_TABLE SET COLUMN = 'X' WHERE KEY = 'Y'}",
+      "end-sql"
+    ]
+  },
+  "SQL with error handler": {
+    "prefix": "sqle",
+    "description": "begin-sql with on-error procedure",
+    "body": [
+      "begin-sql on-error=${1:SQL-Error}",
+      "  ${2:UPDATE PS_TABLE SET COLUMN = 'X' WHERE KEY = 'Y'}",
+      "end-sql"
+    ]
+  },
+  "SQL error procedure": {
+    "prefix": "sqlerr",
+    "description": "Standard SQL error-handling procedure",
+    "body": [
+      "begin-procedure ${1:SQL-Error}",
+      "  show 'SQL error: ' \\$sql-error",
+      "  show 'SQL status: ' #sql-status",
+      "  stop",
+      "end-procedure"
+    ]
+  },
+  "If": {
+    "prefix": "if",
+    "description": "if ... end-if",
+    "body": [
+      "if ${1:condition}",
+      "  $0",
+      "end-if"
+    ]
+  },
+  "If / else": {
+    "prefix": "ifelse",
+    "description": "if ... else ... end-if",
+    "body": [
+      "if ${1:condition}",
+      "  $2",
+      "else",
+      "  $0",
+      "end-if"
+    ]
+  },
+  "While": {
+    "prefix": "while",
+    "description": "while loop",
+    "body": [
+      "while ${1:condition}",
+      "  $0",
+      "end-while"
+    ]
+  },
+  "Evaluate": {
+    "prefix": "evaluate",
+    "description": "evaluate / when / when-other",
+    "body": [
+      "evaluate ${1:\\$value}",
+      "  when = '${2:A}'",
+      "    $3",
+      "    break",
+      "  when-other",
+      "    $0",
+      "end-evaluate"
+    ]
+  },
+  "Let": {
+    "prefix": "let",
+    "description": "let assignment",
+    "body": "let ${1:\\$var} = ${2:expression}"
+  },
+  "Move": {
+    "prefix": "move",
+    "description": "move ... to ...",
+    "body": "move ${1:source} to ${2:\\$dest}"
+  },
+  "Print": {
+    "prefix": "print",
+    "description": "print at a position",
+    "body": "print ${1:'text'} (${2:+1},${3:1},${4:0})"
+  },
+  "Print edited": {
+    "prefix": "printe",
+    "description": "print with an edit mask",
+    "body": "print ${1:#amount} (${2:+1},${3:1},${4:12}) edit ${5:999,999,990.00}"
+  },
+  "Show": {
+    "prefix": "show",
+    "description": "Write to the process log",
+    "body": "show '${1:label}: ' ${2:\\$value}"
+  },
+  "Display": {
+    "prefix": "display",
+    "description": "display to terminal / log",
+    "body": "display ${1:'text'}"
+  },
+  "Include": {
+    "prefix": "include",
+    "description": "#include directive",
+    "body": "#include '${1:file.sqc}'   ! ${2:description}"
+  },
+  "Define": {
+    "prefix": "define",
+    "description": "#define substitution variable",
+    "body": "#define ${1:NAME} ${2:value}"
+  },
+  "Ifdef": {
+    "prefix": "ifdef",
+    "description": "#ifdef ... #end-if",
+    "body": [
+      "#ifdef ${1:NAME}",
+      "  $0",
+      "#end-if"
+    ]
+  },
+  "Read file loop": {
+    "prefix": "readfile",
+    "description": "Open a file and read it record by record",
+    "body": [
+      "open '${1:file.dat}' as ${2:1} for-reading record=${3:500}:vary status=#${4:open-status}",
+      "if #${4:open-status} <> 0",
+      "  show 'Unable to open ${1:file.dat}'",
+      "  stop",
+      "end-if",
+      "",
+      "while 1",
+      "  read ${2:1} into ${5:\\$line}:${3:500}",
+      "  if #end-file = 1",
+      "    break",
+      "  end-if",
+      "  $0",
+      "end-while",
+      "",
+      "close ${2:1}"
+    ]
+  },
+  "Write file": {
+    "prefix": "writefile",
+    "description": "Open a file for writing and write a record",
+    "body": [
+      "open '${1:output.dat}' as ${2:2} for-writing record=${3:500}:vary status=#${4:open-status}",
+      "write ${2:2} from ${5:\\$data}:${3:500}",
+      "close ${2:2}"
+    ]
+  },
+  "Create array": {
+    "prefix": "array",
+    "description": "create-array",
+    "body": [
+      "create-array name=${1:my-array} size=${2:100}",
+      "  field=${3:field1}:${4|char,number,date|}",
+      "  field=${5:field2}:${6|number,char,date|}"
+    ]
+  },
+  "Array put": {
+    "prefix": "put",
+    "description": "Store a value in an array",
+    "body": "put ${1:\\$value} into ${2:my-array}(${3:#index}) ${4:field1}"
+  },
+  "Array get": {
+    "prefix": "get",
+    "description": "Read a value from an array",
+    "body": "get ${1:\\$value} from ${2:my-array}(${3:#index}) ${4:field1}"
+  },
+  "Load lookup": {
+    "prefix": "loadlookup",
+    "description": "load-lookup table cache",
+    "body": [
+      "load-lookup",
+      "  name=${1:Lookup-Name}",
+      "  table='${2:PS_TABLE}'",
+      "  key=${3:KEY_COLUMN}",
+      "  return_value=${4:VALUE_COLUMN}"
+    ]
+  },
+  "Lookup": {
+    "prefix": "lookup",
+    "description": "Look up a value loaded with load-lookup",
+    "body": "lookup ${1:Lookup-Name} ${2:\\$key} ${3:\\$result}"
+  },
+  "Unstring": {
+    "prefix": "unstring",
+    "description": "Split a delimited string",
+    "body": "unstring ${1:\\$source} by '${2:,}' into ${3:\\$field1} ${4:\\$field2}"
+  },
+  "String join": {
+    "prefix": "string",
+    "description": "Join strings with a separator",
+    "body": "string ${1:\\$a} ${2:\\$b} by '${3: }' into ${4:\\$result}"
+  },
+  "PeopleSoft run control": {
+    "prefix": ["psruncntl", "runcontrol"],
+    "description": "Read run control parameters for the current process",
+    "body": [
+      "begin-procedure Get-Run-Control",
+      "begin-select",
+      "RC.${1:FIELD}  &RC.${1:FIELD}",
+      "  let ${2:\\$parm} = &RC.${1:FIELD}",
+      "FROM PS_${3:RUN_CNTL_TABLE} RC",
+      "WHERE RC.OPRID = \\$prcs_oprid",
+      "  AND RC.RUN_CNTL_ID = \\$prcs_run_cntl_id",
+      "end-select",
+      "end-procedure"
+    ]
+  },
+  "PeopleSoft report skeleton": {
+    "prefix": ["psreport", "psskeleton"],
+    "description": "Standard PeopleSoft SQR report skeleton (adapt include list to your PeopleTools version)",
+    "body": [
+      "!***********************************************************************",
+      "! ${1:XXX001}: ${2:Report Title}",
+      "!***********************************************************************",
+      "",
+      "#include 'setenv.sqc'    ! Set environment",
+      "",
+      "begin-setup",
+      "#include 'ptset02.sqc'   ! Printer and page-size initialization",
+      "end-setup",
+      "",
+      "begin-report",
+      "  do Init-DateTime",
+      "  do Init-Number",
+      "  do Get-Current-DateTime",
+      "  do Init-Report",
+      "  do Process-Main",
+      "  do Reset",
+      "  do Stdapi-Term",
+      "end-report",
+      "",
+      "begin-procedure Init-Report",
+      "  move '${1:XXX001}' to \\$ReportID",
+      "  move '${2:Report Title}' to \\$ReportTitle",
+      "  do Stdapi-Init",
+      "  if \\$prcs_process_instance = ''",
+      "    ! Running outside Process Scheduler",
+      "  else",
+      "    ! Read run control parameters here",
+      "  end-if",
+      "end-procedure",
+      "",
+      "begin-procedure Process-Main",
+      "  $0",
+      "end-procedure",
+      "",
+      "#include 'reset.sqc'     ! Reset printer procedure",
+      "#include 'curdttim.sqc'  ! Current date and time",
+      "#include 'datetime.sqc'  ! Date/time routines",
+      "#include 'number.sqc'    ! Number routines",
+      "#include 'stdapi.sqc'    ! Process Scheduler API"
+    ]
+  },
+  "Commit": {
+    "prefix": "commit",
+    "description": "Commit the transaction",
+    "body": "commit"
+  },
+  "New page": {
+    "prefix": "newpage",
+    "description": "Start a new page",
+    "body": "new-page"
+  }
+}

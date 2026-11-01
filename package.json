@@ -1,0 +1,286 @@
+{
+  "name": "peoplesoft-sqr",
+  "displayName": "PeopleSoft SQR",
+  "description": "Syntax highlighting, linting, snippets, hover documentation and navigation for the PeopleSoft SQR language (.sqr / .sqc).",
+  "version": "0.1.0",
+  "publisher": "RichardWood",
+  "license": "MIT",
+  "engines": {
+    "vscode": "^1.75.0"
+  },
+  "categories": [
+    "Programming Languages",
+    "Linters",
+    "Snippets"
+  ],
+  "keywords": [
+    "sqr",
+    "peoplesoft",
+    "sqc",
+    "oracle",
+    "psoft",
+    "PeopleTools"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/RicardoWood/VSCode-sqr"
+  },
+  "main": "./extension.js",
+  "icon": "./icon.png",
+  "capabilities": {
+    "untrustedWorkspaces": {
+      "supported": true
+    }
+  },
+  "contributes": {
+    "languages": [
+      {
+        "id": "sqr",
+        "aliases": [
+          "SQR",
+          "PeopleSoft SQR",
+          "sqr"
+        ],
+        "extensions": [
+          ".sqr",
+          ".sqc"
+        ],
+        "configuration": "./language-configuration.json"
+      }
+    ],
+    "grammars": [
+      {
+        "language": "sqr",
+        "scopeName": "source.sqr",
+        "path": "./syntaxes/sqr.tmLanguage.json"
+      }
+    ],
+    "snippets": [
+      {
+        "language": "sqr",
+        "path": "./snippets/sqr.json"
+      }
+    ],
+    "commands": [
+      {
+        "command": "sqr.lintCurrentFile",
+        "title": "SQR: Re-run Lint on Current File"
+      }
+    ],
+    "configuration": {
+      "title": "PeopleSoft SQR",
+      "properties": {
+        "sqr.lint.enable": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable SQR linting."
+        },
+        "sqr.lint.undefinedProcedure": {
+          "type": "string",
+          "enum": [
+            "off",
+            "hint",
+            "information",
+            "warning",
+            "error"
+          ],
+          "default": "warning",
+          "description": "Severity for 'do' calls to a procedure that is not defined in the file. Automatically downgraded to 'information' when the file has #include directives, because the procedure may live in an include."
+        },
+        "sqr.lint.unusedProcedure": {
+          "type": "string",
+          "enum": [
+            "off",
+            "hint",
+            "information",
+            "warning",
+            "error"
+          ],
+          "default": "hint",
+          "description": "Severity for procedures that are defined but never referenced (not applied to .sqc files)."
+        },
+        "sqr.lint.argumentCount": {
+          "type": "string",
+          "enum": [
+            "off",
+            "hint",
+            "information",
+            "warning",
+            "error"
+          ],
+          "default": "warning",
+          "description": "Severity when the number of arguments in a 'do' call differs from the procedure's parameter list."
+        },
+        "sqr.lint.missingMainSection": {
+          "type": "string",
+          "enum": [
+            "off",
+            "hint",
+            "information",
+            "warning",
+            "error"
+          ],
+          "default": "warning",
+          "description": "Severity when a .sqr file has no begin-program / begin-report section."
+        },
+        "sqr.lint.todoComments": {
+          "type": "string",
+          "enum": [
+            "off",
+            "hint",
+            "information",
+            "warning",
+            "error"
+          ],
+          "default": "information",
+          "description": "Severity for TODO / FIXME / HACK / XXX comments."
+        },
+        "sqr.lint.knownProcedures": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": [],
+          "description": "Procedure names defined in include files (e.g. your site's custom .sqc libraries) that should never be reported as undefined or unused."
+        }
+      }
+    },
+    "configurationDefaults": {
+      "editor.tokenColorCustomizations": {
+        "textMateRules": [
+          {
+            "scope": "keyword.control.section.sqr",
+            "settings": {
+              "foreground": "#C678DD",
+              "fontStyle": "bold"
+            }
+          },
+          {
+            "scope": "keyword.control.sqr",
+            "settings": {
+              "foreground": "#E06C75"
+            }
+          },
+          {
+            "scope": "keyword.control.directive.sqr",
+            "settings": {
+              "foreground": "#A67C52"
+            }
+          },
+          {
+            "scope": "keyword.other.command.sqr",
+            "settings": {
+              "foreground": "#3B8EEA"
+            }
+          },
+          {
+            "scope": "storage.modifier.sqr",
+            "settings": {
+              "foreground": "#2AA198"
+            }
+          },
+          {
+            "scope": "support.function.builtin.sqr",
+            "settings": {
+              "foreground": "#D19A2A"
+            }
+          },
+          {
+            "scope": "entity.name.function.sqr",
+            "settings": {
+              "foreground": "#2EAD7B",
+              "fontStyle": "bold"
+            }
+          },
+          {
+            "scope": "entity.name.function.call.sqr",
+            "settings": {
+              "foreground": "#2EAD7B"
+            }
+          },
+          {
+            "scope": "string.quoted.single.sqr",
+            "settings": {
+              "foreground": "#CE9178"
+            }
+          },
+          {
+            "scope": "variable.other.string.sqr",
+            "settings": {
+              "foreground": "#4CAF50"
+            }
+          },
+          {
+            "scope": "variable.other.numeric.sqr",
+            "settings": {
+              "foreground": "#E08A3C"
+            }
+          },
+          {
+            "scope": "variable.other.column.sqr",
+            "settings": {
+              "foreground": "#D46FB4"
+            }
+          },
+          {
+            "scope": "variable.language.sqr",
+            "settings": {
+              "foreground": "#B8A32E",
+              "fontStyle": "italic"
+            }
+          },
+          {
+            "scope": "support.variable.peoplesoft.sqr",
+            "settings": {
+              "foreground": "#F0805A",
+              "fontStyle": "italic"
+            }
+          },
+          {
+            "scope": "variable.other.substitution.sqr",
+            "settings": {
+              "foreground": "#A78BFA"
+            }
+          },
+          {
+            "scope": "constant.other.position.sqr",
+            "settings": {
+              "foreground": "#6FA8DC"
+            }
+          },
+          {
+            "scope": "constant.numeric.sqr",
+            "settings": {
+              "foreground": "#5C9EAD"
+            }
+          },
+          {
+            "scope": "keyword.other.sql.sqr",
+            "settings": {
+              "foreground": "#8E8EE0"
+            }
+          },
+          {
+            "scope": "support.function.sql.sqr",
+            "settings": {
+              "foreground": "#9C7FD0"
+            }
+          },
+          {
+            "scope": "keyword.operator.sqr",
+            "settings": {
+              "foreground": "#909090"
+            }
+          },
+          {
+            "scope": "comment.line.exclamation.sqr",
+            "settings": {
+              "foreground": "#6A9955",
+              "fontStyle": "italic"
+            }
+          }
+        ]
+      }
+    }
+  }
+}

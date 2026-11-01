@@ -1,0 +1,187 @@
+{
+  "$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+  "name": "SQR",
+  "scopeName": "source.sqr",
+  "patterns": [{ "include": "#main" }],
+  "repository": {
+    "main": {
+      "patterns": [
+        { "include": "#comment" },
+        { "include": "#string" },
+        { "include": "#preprocessor" },
+        { "include": "#select-block" },
+        { "include": "#sql-block" },
+        { "include": "#procedure-def" },
+        { "include": "#procedure-call" },
+        { "include": "#section" },
+        { "include": "#declare" },
+        { "include": "#control" },
+        { "include": "#command" },
+        { "include": "#modifier" },
+        { "include": "#function" },
+        { "include": "#reserved-variable" },
+        { "include": "#variable" },
+        { "include": "#substitution" },
+        { "include": "#position" },
+        { "include": "#identifier" },
+        { "include": "#number" },
+        { "include": "#operator" }
+      ]
+    },
+
+    "comment": {
+      "name": "comment.line.exclamation.sqr",
+      "match": "!.*$"
+    },
+
+    "string": {
+      "name": "string.quoted.single.sqr",
+      "begin": "'",
+      "end": "'|$",
+      "patterns": [
+        { "name": "variable.other.substitution.sqr", "match": "\\{[A-Za-z_][\\w\\-]*\\}" }
+      ]
+    },
+
+    "preprocessor": {
+      "match": "(?i)^\\s*(#(?:include|define|undef|ifdef|ifndef|if|else|endif|end-if|debug[a-z]*))(?![\\w\\-])",
+      "captures": {
+        "1": { "name": "keyword.control.directive.sqr" }
+      }
+    },
+
+    "procedure-def": {
+      "match": "(?i)(?<![\\w\\-$#&])(begin-procedure)\\s+([A-Za-z_][\\w\\-]*)",
+      "captures": {
+        "1": { "name": "keyword.control.section.sqr" },
+        "2": { "name": "entity.name.function.sqr" }
+      }
+    },
+
+    "procedure-call": {
+      "match": "(?i)(?<![\\w\\-$#&])(do)\\s+([A-Za-z_][\\w\\-]*)",
+      "captures": {
+        "1": { "name": "keyword.control.sqr" },
+        "2": { "name": "entity.name.function.call.sqr" }
+      }
+    },
+
+    "section": {
+      "name": "keyword.control.section.sqr",
+      "match": "(?i)(?<![\\w\\-$#&])(?:begin|end)-(?:procedure|program|report|setup|heading|footing|select|sql|document)(?![\\w\\-])"
+    },
+
+    "declare": {
+      "name": "keyword.control.section.sqr",
+      "match": "(?i)(?<![\\w\\-$#&])(?:declare-(?:layout|printer|report|procedure|variable|chart|image|toc|color-map)|end-declare)(?![\\w\\-])"
+    },
+
+    "control": {
+      "name": "keyword.control.sqr",
+      "match": "(?i)(?<![\\w\\-$#&])(?:if|else|end-if|while|end-while|evaluate|when|when-other|end-evaluate|break|stop|exit-select|do|call)(?![\\w\\-])"
+    },
+
+    "command": {
+      "name": "keyword.other.command.sqr",
+      "match": "(?i)(?<![\\w\\-$#&])(?:add|alter-color-map|alter-connection|alter-locale|alter-printer|alter-report|array-add|array-divide|array-multiply|array-subtract|ask|clear-array|close|columns|commit|concat|create-array|default-numeric|display|divide|encode|execute|extract|find|get|get-color|graphic|input|last-page|let|load-lookup|lookup|lowercase|move|multiply|new-page|new-report|next-column|next-listing|open|page-number|page-size|position|print|print-bar-code|print-chart|print-direct|print-image|put|read|rollback|set-color|show|sql-count|string|subtract|toc-entry|unstring|uppercase|use|use-column|use-printer-type|use-procedure|use-report|write)(?![\\w\\-])"
+    },
+
+    "modifier": {
+      "name": "storage.modifier.sqr",
+      "match": "(?i)(?<![\\w\\-$#&])(?:bold|underline|reverse|noline|for-reading|for-writing|for-append|on-error|on-break|no-advance|wrap)(?![\\w\\-])"
+    },
+
+    "function": {
+      "name": "support.function.builtin.sqr",
+      "match": "(?i)(?<![\\w\\-$#&])(?:abs|acos|asin|ascii|atan|ceil|chr|cond|cos|cosh|datenow|datetostr|dateadd|datediff|deg|edit|exp|floor|instr|isblank|isnull|length|lengthp|log|log10|lower|lpad|ltrim|mod|nvl|power|rad|round|rpad|rtrim|sign|sin|sinh|soundex|sqrt|strtodate|substr|substrb|substrp|tan|tanh|to_char|to_multi_byte|to_number|to_single_byte|translate|trunc|upper)(?=\\s*\\()"
+    },
+
+    "reserved-variable": {
+      "patterns": [
+        {
+          "name": "variable.language.sqr",
+          "match": "(?i)(?<![\\w\\-$#&])[$#](?:current-column|current-line|current-date|end-file|page-count|return-status|sql-count|sql-status|sql-error|sqr-max-columns|sqr-max-lines|sqr-pid|sqr-database|sqr-encoding|sqr-hostname|sqr-locale|sqr-platform|sqr-program|sqr-report|sqr-ver|username)(?![\\w\\-])"
+        },
+        {
+          "name": "support.variable.peoplesoft.sqr",
+          "match": "(?i)(?<![\\w\\-$#&])[$#](?:prcs_process_instance|prcs_oprid|prcs_run_cntl_id|asoftoday|asofnow|reportdate|reporttime|reporttitle|reportid)(?![\\w\\-])"
+        }
+      ]
+    },
+
+    "variable": {
+      "patterns": [
+        { "name": "variable.other.string.sqr", "match": "\\$[A-Za-z_][\\w\\-]*" },
+        { "name": "variable.other.numeric.sqr", "match": "#[A-Za-z_][\\w\\-]*" },
+        { "name": "variable.other.column.sqr", "match": "&[A-Za-z_][\\w\\-]*(?:\\.[A-Za-z_][\\w\\-]*)*" }
+      ]
+    },
+
+    "substitution": {
+      "name": "variable.other.substitution.sqr",
+      "match": "\\{[A-Za-z_][\\w\\-]*\\}"
+    },
+
+    "position": {
+      "name": "constant.other.position.sqr",
+      "match": "\\(\\s*[+\\-]?\\d+\\s*(?:,\\s*[+\\-]?\\d+\\s*(?:,\\s*\\d+\\s*)?)?\\)"
+    },
+
+    "identifier": {
+      "match": "[A-Za-z_][\\w\\-]*"
+    },
+
+    "number": {
+      "name": "constant.numeric.sqr",
+      "match": "\\b\\d+(?:\\.\\d+)?\\b"
+    },
+
+    "operator": {
+      "name": "keyword.operator.sqr",
+      "match": "\\|\\||<>|<=|>=|[-+*/%^=<>]"
+    },
+
+    "select-block": {
+      "begin": "(?i)(?<![\\w\\-$#&])(begin-select)(?![\\w\\-])",
+      "beginCaptures": { "1": { "name": "keyword.control.section.sqr" } },
+      "end": "(?i)(?<![\\w\\-$#&])(end-select)(?![\\w\\-])",
+      "endCaptures": { "1": { "name": "keyword.control.section.sqr" } },
+      "contentName": "meta.embedded.block.sql.sqr",
+      "patterns": [
+        { "include": "#sql-keyword" },
+        { "include": "#main" }
+      ]
+    },
+
+    "sql-block": {
+      "begin": "(?i)(?<![\\w\\-$#&])(begin-sql)(?![\\w\\-])",
+      "beginCaptures": { "1": { "name": "keyword.control.section.sqr" } },
+      "end": "(?i)(?<![\\w\\-$#&])(end-sql)(?![\\w\\-])",
+      "endCaptures": { "1": { "name": "keyword.control.section.sqr" } },
+      "contentName": "meta.embedded.block.sql.sqr",
+      "patterns": [
+        { "include": "#comment" },
+        { "include": "#string" },
+        { "include": "#sql-keyword" },
+        { "include": "#variable" },
+        { "include": "#substitution" },
+        { "include": "#identifier" },
+        { "include": "#number" },
+        { "include": "#operator" }
+      ]
+    },
+
+    "sql-keyword": {
+      "patterns": [
+        {
+          "name": "keyword.other.sql.sqr",
+          "match": "(?i)(?<![\\w\\-$#&.])(?:select|distinct|from|where|and|or|not|in|exists|between|like|is|null|order|by|group|having|union|all|intersect|minus|join|inner|outer|left|right|full|cross|on|as|case|when|then|else|insert|into|values|update|set|delete|create|table|alter|drop|asc|desc|with)(?![\\w\\-])"
+        },
+        {
+          "name": "support.function.sql.sqr",
+          "match": "(?i)(?<![\\w\\-$#&.])(?:count|sum|min|max|avg|coalesce|decode|to_date|nvl|sysdate|sysdatetime|current_date|substr|upper|lower|trim|trunc|round)(?![\\w\\-])"
+        }
+      ]
+    }
+  }
+}
